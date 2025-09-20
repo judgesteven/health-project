@@ -90,6 +90,8 @@ src/
 
 This project is configured for deployment on Vercel with automatic builds from the main branch.
 
+**Last Updated**: September 19, 2025 - Fixed Vercel build compatibility issues
+
 ### Vercel Configuration
 - Framework: Other
 - Build Command: `npm run web:build`
