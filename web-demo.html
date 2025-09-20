@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Gamification App - Web Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1d1d1f;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 390px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 24px;
+            margin: 16px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+            margin-right: 16px;
+            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
+        }
+        
+        .user-info h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1d1d1f;
+            letter-spacing: -0.003em;
+        }
+        
+        .level {
+            color: #007AFF;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 16px;
+        }
+        
+        .rank {
+            color: #8E8E93;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(120, 120, 128, 0.12);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 6px;
+            letter-spacing: -0.003em;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: #8E8E93;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+        
+        .progress-container {
+            margin-bottom: 16px;
+        }
+        
+        .progress-text {
+            text-align: center;
+            color: #7F8C8D;
+            margin-bottom: 8px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: rgba(120, 120, 128, 0.16);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007AFF, #5856D6);
+            border-radius: 3px;
+            width: 68%;
+            box-shadow: 0 1px 3px rgba(0, 122, 255, 0.3);
+        }
+        
+        .next-level {
+            text-align: center;
+            color: #7F8C8D;
+            font-size: 12px;
+        }
+        
+        .team-info {
+            text-align: center;
+            padding-top: 12px;
+            border-top: 1px solid #E9ECEF;
+        }
+        
+        .team-label {
+            color: #7F8C8D;
+            margin-right: 8px;
+        }
+        
+        .team-name {
+            color: #3498DB;
+            font-weight: 600;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1d1d1f;
+            letter-spacing: -0.003em;
+        }
+        
+        .view-all {
+            color: #007AFF;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        
+        .missions-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding-bottom: 16px;
+        }
+        
+        .mission-card {
+            min-width: 280px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+        
+        .mission-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .mission-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .mission-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1d1d1f;
+            letter-spacing: -0.003em;
+        }
+        
+        .mission-description {
+            font-size: 13px;
+            color: #8E8E93;
+            font-weight: 500;
+        }
+        
+        .mission-progress {
+            margin-bottom: 12px;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .mission-progress-bar {
+            height: 4px;
+            background: rgba(120, 120, 128, 0.16);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .mission-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007AFF, #5856D6);
+            border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(0, 122, 255, 0.3);
+        }
+        
+        .rewards {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 8px;
+        }
+        
+        .reward-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .reward-icon {
+            margin-right: 4px;
+        }
+        
+        .reward-text {
+            font-size: 12px;
+            color: #7F8C8D;
+            font-weight: 600;
+        }
+        
+        .completed-badge {
+            background: linear-gradient(135deg, #34C759, #30D158);
+            color: white;
+            border-radius: 8px;
+            padding: 6px 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .current-user {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .rank-icon {
+            width: 40px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .rank-1 { color: #FFD700; }
+        .rank-2 { color: #C0C0C0; }
+        .rank-3 { color: #CD7F32; }
+        .rank-other { color: #7F8C8D; }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #FF3B30, #FF2D92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin: 0 12px;
+            box-shadow: 0 2px 8px rgba(255, 59, 48, 0.3);
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #1d1d1f;
+            letter-spacing: -0.003em;
+        }
+        
+        .current-user-name {
+            color: #007AFF;
+        }
+        
+        .user-score {
+            font-size: 15px;
+            color: #8E8E93;
+            font-weight: 500;
+        }
+        
+        .current-user-badge {
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            color: white;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            box-shadow: 0 1px 4px rgba(0, 122, 255, 0.3);
+        }
+        
+        .prizes-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding-bottom: 16px;
+        }
+        
+        .prize-card {
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+        
+        .prize-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 16px;
+            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
+        }
+        
+        .category {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .category-icon {
+            margin-right: 6px;
+        }
+        
+        .category-text {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .prize-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1d1d1f;
+            letter-spacing: -0.003em;
+        }
+        
+        .prize-description {
+            font-size: 13px;
+            color: #8E8E93;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .price-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .price {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .buy-button {
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .buy-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
+        }
+        
+        .owned-button {
+            background: linear-gradient(135deg, #34C759, #30D158);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
+        }
+        
+        .coins-display {
+            color: #007AFF;
+            font-weight: 600;
+            margin-top: 4px;
+            font-size: 15px;
+        }
+        
+        .footer-text {
+            text-align: center;
+            color: #8E8E93;
+            font-style: italic;
+            font-size: 13px;
+            border-top: 1px solid rgba(120, 120, 128, 0.16);
+            padding-top: 16px;
+            font-weight: 500;
+        }
+        
+        @media (min-width: 769px) {
+            .container {
+                max-width: 390px;
+                margin: 40px auto;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 20px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        }
+        
+        /* iOS-style scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(120, 120, 128, 0.1);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(120, 120, 128, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(120, 120, 128, 0.5);
+        }
+        
+        /* User Selector Styles */
+        .selector-button {
+            background: rgba(120, 120, 128, 0.12);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid rgba(120, 120, 128, 0.16);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .selector-button:hover {
+            background: rgba(120, 120, 128, 0.16);
+        }
+        
+        .selector-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .selected-player-name {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1d1d1f;
+            flex: 1;
+            margin-left: 12px;
+        }
+        
+        .dropdown-icon {
+            font-size: 14px;
+            color: #8E8E93;
+            font-weight: 600;
+        }
+        
+        .dropdown {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            margin-top: 8px;
+            border: 1px solid rgba(120, 120, 128, 0.16);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .player-option {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid rgba(120, 120, 128, 0.08);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .player-option:hover {
+            background: rgba(0, 122, 255, 0.05);
+        }
+        
+        .player-option:last-child {
+            border-bottom: none;
+        }
+        
+        .option-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .option-player-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1d1d1f;
+            margin-left: 12px;
+            flex: 1;
+        }
+        
+        .checkmark {
+            font-size: 16px;
+            color: #007AFF;
+            font-weight: 600;
+        }
+        
+        /* Powered By GameLayer */
+        .powered-by-container {
+            text-align: center;
+            margin: 8px 16px;
+        }
+        
+        .powered-by-text {
+            font-size: 11px;
+            font-weight: 500;
+            color: #8E8E93;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- User Selector -->
+        <div class="card">
+            <h3 class="section-title">Select Player</h3>
+            <div class="selector-button" onclick="toggleDropdown()">
+                <div class="selector-content">
+                    <div class="player-avatar">HG</div>
+                    <span class="selected-player-name">Happy Gilmore</span>
+                    <span class="dropdown-icon" id="dropdown-icon">▼</span>
+                </div>
+            </div>
+            <div class="dropdown" id="player-dropdown" style="display: none;">
+                <div class="player-option" onclick="selectPlayer('player-123', 'Happy Gilmore', 'HG')">
+                    <div class="option-avatar">HG</div>
+                    <span class="option-player-name">Happy Gilmore</span>
+                    <span class="checkmark">✓</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Powered By GameLayer -->
+        <div class="powered-by-container">
+            <span class="powered-by-text">POWERED BY GAMELAYER</span>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="card">
+            <div class="profile-header">
+                <div class="avatar">HG</div>
+                <div class="user-info">
+                    <h2>Happy Gilmore</h2>
+                    <div class="level">Level 1</div>
+                    <div class="rank">Rank #1</div>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value">8,500</div>
+                    <div class="stat-label">Today</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">45,000</div>
+                    <div class="stat-label">This Week</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">125,000</div>
+                    <div class="stat-label">Total</div>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-text">2450 / 3000 XP</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="next-level">550 XP to Level 13</div>
+            </div>
+
+            <div class="team-info">
+                <span class="team-label">Team:</span>
+                <span class="team-name">Fitness Warriors</span>
+            </div>
+        </div>
+
+        <!-- Missions Card -->
+        <div class="card">
+            <div class="section-header">
+                <h3 class="section-title">Missions</h3>
+                <span class="view-all">View All</span>
+            </div>
+            
+            <div class="missions-scroll">
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <span class="mission-icon">👟</span>
+                        <div>
+                            <div class="mission-title">Daily Walker</div>
+                            <div class="mission-description">Walk 10,000 steps today</div>
+                        </div>
+                    </div>
+                    <div class="mission-progress">
+                        <div class="progress-info">
+                            <span>8,500 / 10,000</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="mission-progress-bar">
+                            <div class="mission-progress-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="rewards">
+                        <div class="reward-item">
+                            <span class="reward-icon">⭐</span>
+                            <span class="reward-text">100 XP</span>
+                        </div>
+                        <div class="reward-item">
+                            <span class="reward-icon">🪙</span>
+                            <span class="reward-text">50 Coins</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <span class="mission-icon">👟</span>
+                        <div>
+                            <div class="mission-title">Weekend Warrior</div>
+                            <div class="mission-description">Complete 25,000 steps this weekend</div>
+                        </div>
+                    </div>
+                    <div class="mission-progress">
+                        <div class="progress-info">
+                            <span>18,000 / 25,000</span>
+                            <span>72%</span>
+                        </div>
+                        <div class="mission-progress-bar">
+                            <div class="mission-progress-fill" style="width: 72%"></div>
+                        </div>
+                    </div>
+                    <div class="rewards">
+                        <div class="reward-item">
+                            <span class="reward-icon">⭐</span>
+                            <span class="reward-text">250 XP</span>
+                        </div>
+                        <div class="reward-item">
+                            <span class="reward-icon">🪙</span>
+                            <span class="reward-text">100 Coins</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <span class="mission-icon">👟</span>
+                        <div>
+                            <div class="mission-title">Early Bird</div>
+                            <div class="mission-description">Walk 5,000 steps before 9 AM</div>
+                        </div>
+                    </div>
+                    <div class="mission-progress">
+                        <div class="progress-info">
+                            <span>5,000 / 5,000</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="mission-progress-bar">
+                            <div class="mission-progress-fill" style="width: 100%; background: #28A745;"></div>
+                        </div>
+                    </div>
+                    <div class="rewards">
+                        <div class="reward-item">
+                            <span class="reward-icon">⭐</span>
+                            <span class="reward-text">75 XP</span>
+                        </div>
+                        <div class="reward-item">
+                            <span class="reward-icon">🪙</span>
+                            <span class="reward-text">25 Coins</span>
+                        </div>
+                    </div>
+                    <div class="completed-badge">✓ Completed</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rankings Card -->
+        <div class="card">
+            <div class="section-header">
+                <h3 class="section-title">Leaderboard</h3>
+                <span class="view-all">View All</span>
+            </div>
+            
+            <div class="leaderboard-item">
+                <div class="rank-icon rank-1">🥇</div>
+                <div class="user-avatar">SC</div>
+                <div class="user-info">
+                    <div class="user-name">Sarah Chen</div>
+                    <div class="user-score">125,000 steps</div>
+                </div>
+            </div>
+            
+            <div class="leaderboard-item">
+                <div class="rank-icon rank-2">🥈</div>
+                <div class="user-avatar">MR</div>
+                <div class="user-info">
+                    <div class="user-name">Mike Rodriguez</div>
+                    <div class="user-score">118,000 steps</div>
+                </div>
+            </div>
+            
+            <div class="leaderboard-item">
+                <div class="rank-icon rank-3">🥉</div>
+                <div class="user-avatar">EW</div>
+                <div class="user-info">
+                    <div class="user-name">Emma Wilson</div>
+                    <div class="user-score">112,000 steps</div>
+                </div>
+            </div>
+            
+            <div class="leaderboard-item current-user">
+                <div class="rank-icon rank-other">#15</div>
+                <div class="user-avatar">AJ</div>
+                <div class="user-info">
+                    <div class="user-name current-user-name">Alex Johnson</div>
+                    <div class="user-score">85,000 steps</div>
+                </div>
+                <div class="current-user-badge">YOU</div>
+            </div>
+            
+            <div class="footer-text">Rankings update every hour</div>
+        </div>
+
+        <!-- Prizes Card -->
+        <div class="card">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">Prize Shop</h3>
+                    <div class="coins-display">🪙 1,250 coins</div>
+                </div>
+                <span class="view-all">View All</span>
+            </div>
+            
+            <div class="prizes-scroll">
+                <div class="prize-card">
+                    <div class="prize-image">💧</div>
+                    <div class="category">
+                        <span class="category-icon">💚</span>
+                        <span class="category-text" style="color: #2ECC71;">HEALTH</span>
+                    </div>
+                    <div class="prize-title">Premium Water Bottle</div>
+                    <div class="prize-description">Insulated stainless steel water bottle</div>
+                    <div class="price-container">
+                        <span class="price">🪙 500</span>
+                    </div>
+                    <button class="buy-button">Buy</button>
+                </div>
+                
+                <div class="prize-card">
+                    <div class="prize-image">⌚</div>
+                    <div class="category">
+                        <span class="category-icon">💪</span>
+                        <span class="category-text" style="color: #E74C3C;">FITNESS</span>
+                    </div>
+                    <div class="prize-title">Fitness Tracker</div>
+                    <div class="prize-description">Advanced fitness tracking device</div>
+                    <div class="price-container">
+                        <span class="price">🪙 2,000</span>
+                    </div>
+                    <button class="buy-button">Buy</button>
+                </div>
+                
+                <div class="prize-card">
+                    <div class="prize-image">🧘</div>
+                    <div class="category">
+                        <span class="category-icon">🧘</span>
+                        <span class="category-text" style="color: #9B59B6;">WELLNESS</span>
+                    </div>
+                    <div class="prize-title">Yoga Mat</div>
+                    <div class="prize-description">Premium non-slip yoga mat</div>
+                    <div class="price-container">
+                        <span class="price">🪙 800</span>
+                    </div>
+                    <button class="owned-button">✓ Owned</button>
+                </div>
+                
+                <div class="prize-card">
+                    <div class="prize-image">📚</div>
+                    <div class="category">
+                        <span class="category-icon">🌟</span>
+                        <span class="category-text" style="color: #F39C12;">LIFESTYLE</span>
+                    </div>
+                    <div class="prize-title">Healthy Cookbook</div>
+                    <div class="prize-description">Digital cookbook with healthy recipes</div>
+                    <div class="price-container">
+                        <span class="price">🪙 300</span>
+                    </div>
+                    <button class="buy-button">Buy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User selector functionality
+        let selectedPlayerId = 'player-123';
+        
+        function toggleDropdown() {
+            const dropdown = document.getElementById('player-dropdown');
+            const icon = document.getElementById('dropdown-icon');
+            
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                dropdown.style.display = 'none';
+                icon.textContent = '▼';
+            }
+        }
+        
+        function selectPlayer(playerId, playerName, playerInitials) {
+            selectedPlayerId = playerId;
+            
+            // Update the selector button
+            const selectorContent = document.querySelector('.selector-content');
+            selectorContent.innerHTML = `
+                <div class="player-avatar">${playerInitials}</div>
+                <span class="selected-player-name">${playerName}</span>
+                <span class="dropdown-icon" id="dropdown-icon">▼</span>
+            `;
+            
+            // Update the profile card
+            const profileAvatar = document.querySelector('.profile-header .avatar');
+            const profileName = document.querySelector('.user-info h2');
+            profileAvatar.textContent = playerInitials;
+            profileName.textContent = playerName;
+            
+            // Update checkmarks in dropdown
+            document.querySelectorAll('.player-option').forEach(option => {
+                const checkmark = option.querySelector('.checkmark');
+                if (checkmark) {
+                    checkmark.style.display = 'none';
+                }
+            });
+            
+            // Add checkmark to selected option
+            const selectedOption = document.querySelector(`[onclick*="${playerId}"]`);
+            if (selectedOption) {
+                const checkmark = selectedOption.querySelector('.checkmark');
+                if (checkmark) {
+                    checkmark.style.display = 'inline';
+                }
+            }
+            
+            // Close dropdown
+            document.getElementById('player-dropdown').style.display = 'none';
+            document.getElementById('dropdown-icon').textContent = '▼';
+            
+            // Show selection alert
+            alert(`Selected player: ${playerName}`);
+        }
+        
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers for buttons
+            const buyButtons = document.querySelectorAll('.buy-button');
+            buyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const prizeCard = this.closest('.prize-card');
+                    const prizeTitle = prizeCard.querySelector('.prize-title').textContent;
+                    const price = prizeCard.querySelector('.price').textContent;
+                    
+                    if (confirm(`Buy ${prizeTitle} for ${price}?`)) {
+                        alert('Prize purchased successfully!');
+                        this.textContent = '✓ Owned';
+                        this.className = 'owned-button';
+                    }
+                });
+            });
+            
+            // Add click handlers for view all buttons
+            const viewAllButtons = document.querySelectorAll('.view-all');
+            viewAllButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    alert('Full view coming soon!');
+                });
+            });
+            
+            // Add click handlers for mission cards
+            const missionCards = document.querySelectorAll('.mission-card');
+            missionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const missionTitle = this.querySelector('.mission-title').textContent;
+                    alert(`Selected mission: ${missionTitle}`);
+                });
+            });
+            
+            // Add click handlers for leaderboard items
+            const leaderboardItems = document.querySelectorAll('.leaderboard-item');
+            leaderboardItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const userName = this.querySelector('.user-name').textContent;
+                    alert(`Viewing ${userName}'s profile`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

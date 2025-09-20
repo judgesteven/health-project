@@ -1,97 +1,116 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Health Gamification App
 
-# Getting Started
+A React Native web application that integrates with GameLayer API for health gamification features including missions, achievements, leaderboards, and prizes.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+- **Player Management**: Select and manage players from GameLayer API
+- **Profile Cards**: Display player stats including points, credits, level, and team
+- **Mission System**: Dynamic daily missions with progress tracking
+- **Step Tracking**: Real-time step count with "Add Steps" functionality
+- **Progress Bars**: Visual progress indicators for mission completion
+- **Real-time Updates**: Automatic data refresh after event completion
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Tech Stack
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **React Native Web**: Cross-platform web development
+- **TypeScript**: Type-safe development
+- **GameLayer API**: Backend gamification services
+- **Lucide React Native**: Modern icon library
+- **Webpack**: Module bundling and development server
 
-```sh
-# Using npm
-npm start
+## GameLayer Integration
 
-# OR using Yarn
-yarn start
+The app integrates with GameLayer API using the following endpoints:
+
+- `GET /players` - List all players
+- `GET /players/{id}` - Get player details
+- `GET /missions` - Get player missions
+- `GET /players/{player}/missions/{id}` - Get individual mission progress
+- `POST /events/{id}/complete` - Complete events (e.g., step tracking)
+
+## Key Features
+
+### Dynamic Daily Mission Detection
+The app automatically identifies daily missions using multiple criteria:
+- Mission name contains "daily"
+- Mission description contains "daily"
+- Mission category is "daily"
+- Mission has step-related events
+
+### Real-time Data Synchronization
+- Player data refreshes after event completion
+- Mission progress bars update automatically
+- Step count updates from mission data
+- Persistent player selection across page refreshes
+
+## Development
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
+```bash
+npm install
 ```
 
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+### Development Server
+```bash
+npm run web
 ```
 
-### iOS
+The app will be available at `http://localhost:3000`
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+### Build for Production
+```bash
+npm run web:build
 ```
 
-Then, and every time you update your native dependencies, run:
+## Project Structure
 
-```sh
-bundle exec pod install
+```
+src/
+├── components/          # React Native components
+│   ├── MissionEntry.tsx     # Individual mission display
+│   ├── MissionsCard.tsx     # Mission list container
+│   ├── ProfileCard.tsx      # Player profile display
+│   ├── StepCountCard.tsx    # Step tracking component
+│   └── UserSelector.tsx      # Player selection dropdown
+├── services/            # API integration
+│   └── gameLayerApi.ts     # GameLayer API client
+├── types/               # TypeScript type definitions
+│   └── index.ts
+└── utils/               # Utility functions
+    ├── missionUtils.ts     # Mission detection utilities
+    └── mockData.ts         # Mock data for development
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+## Deployment
 
-```sh
-# Using npm
-npm run ios
+This project is configured for deployment on Vercel with automatic builds from the main branch.
 
-# OR using Yarn
-yarn ios
-```
+### Vercel Configuration
+- Framework: Other
+- Build Command: `npm run web:build`
+- Output Directory: `dist`
+- Install Command: `npm install`
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## API Configuration
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+The app uses the following GameLayer API configuration:
+- API URL: `https://api.gamelayer.co/api/v0`
+- Account ID: `health-project`
+- Authentication: API key in headers
 
-## Step 3: Modify your app
+## Contributing
 
-Now that you have successfully run the app, let's make changes!
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## License
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+This project is licensed under the MIT License.
