@@ -1,10 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-  entry: './index.web.js',
-  mode: 'development',
-  devtool: 'source-map',
+module.exports = (env, argv) => {
+  const isProduction = argv.mode === 'production';
+  
+  return {
+    entry: './index.web.js',
+    mode: isProduction ? 'production' : 'development',
+    devtool: isProduction ? 'source-map' : 'eval-source-map',
   module: {
     rules: [
       {
@@ -42,13 +45,36 @@ module.exports = {
       template: './public/index.html',
     }),
   ],
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'public'),
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'public'),
+      },
+      compress: true,
+      port: 3000,
+      hot: true,
+      open: true,
     },
-    compress: true,
-    port: 3000,
-    hot: true,
-    open: true,
-  },
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: isProduction ? '[name].[contenthash].js' : '[name].js',
+      clean: true,
+    },
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+        },
+      },
+    },
+    performance: {
+      hints: isProduction ? 'warning' : false,
+      maxAssetSize: 500000,
+      maxEntrypointSize: 500000,
+    },
+  };
 };
