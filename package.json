@@ -5,10 +5,11 @@
   "scripts": {
     "web": "webpack serve --mode development",
     "web:build": "webpack --mode production",
-    "build": "npm run web:build",
+    "build": "webpack --mode production",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "dev": "webpack serve --mode development --open"
+    "dev": "webpack serve --mode development --open",
+    "vercel-build": "webpack --mode production"
   },
   "dependencies": {
     "lucide-react-native": "^0.544.0",
@@ -34,6 +35,7 @@
     "webpack-dev-server": "^5.2.2"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   }
 }

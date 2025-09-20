@@ -59,7 +59,7 @@ module.exports = (env, argv) => {
       filename: isProduction ? '[name].[contenthash].js' : '[name].js',
       clean: true,
     },
-    optimization: {
+    optimization: isProduction ? {
       splitChunks: {
         chunks: 'all',
         cacheGroups: {
@@ -70,7 +70,7 @@ module.exports = (env, argv) => {
           },
         },
       },
-    },
+    } : {},
     performance: {
       hints: isProduction ? 'warning' : false,
       maxAssetSize: 500000,
